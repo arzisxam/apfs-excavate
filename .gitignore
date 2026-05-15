@@ -1,0 +1,35 @@
+# Build artefacts
+build/
+compile_error.log
+
+# Python
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Private session context (public version is CLAUDE.md)
+CLAUDE.local.md
+CODE_REVIEW_SESSION*.md
+
+# Sensitive / runtime files
+*.dmg
+*.img
+*.raw
+*.dd
+debug_*.log
+
+# Release Playbook
+GITHUB_RELEASE_PLAYBOOK.md

@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+#
+# apfs-excavate — wrapper script
+#
+# Ensures the binary is compiled and up to date, then runs it.
+# Usage is identical to the binary:
+#   ./apfs-excavate <image> [output_dir] [options]
+#
+# Non-technical users: just run this script — no manual compilation needed.
+# If source files have changed since the last build, it recompiles automatically.
+# Build errors are shown inline and saved to build/compile_error.log.
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BINARY="$SCRIPT_DIR/build/apfs-excavate"
+BUILD_LOG="$SCRIPT_DIR/build/compile_error.log"
+
+mkdir -p "$SCRIPT_DIR/build"
+
+# make is fast when nothing has changed and handles source-file modifications
+# automatically — always running it is simpler and more correct than manual
+# timestamp checks.
+if ! make -C "$SCRIPT_DIR" > "$BUILD_LOG" 2>&1; then
+    echo "apfs-excavate: build failed." >&2
+    echo "Compile log: $BUILD_LOG" >&2
+    echo "" >&2
+    # Show the last 30 lines so the error is visible without opening the file
+    tail -30 "$BUILD_LOG" >&2
+    exit 1
+fi
+
+# Build succeeded — log is only noise, remove it
+rm -f "$BUILD_LOG"
+
+"$BINARY" "$@"
